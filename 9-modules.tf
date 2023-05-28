@@ -8,12 +8,20 @@
 # ================================================================================
 module "ingress-nginx" {
   source = "./modules/ingress-nginx/"
+
+  depends_on = [ 
+    google_container_node_pool.general
+   ]
 }
 
 # cert manager (letsencrypt)
 # ================================================================================
 module "certmanager" {
   source = "./modules/cert-manager/"
+
+  depends_on = [ 
+    google_container_node_pool.general
+   ]
 }
 
 # simple nginx container with an ingress
@@ -24,8 +32,8 @@ module "test_app" {
   hostname = "test.test.opensight.ch"
 
   depends_on = [
-    "module.ingress-nginx",
-    "module.certmanager"
+    module.ingress-nginx,
+    module.certmanager
   ]
 }
 
